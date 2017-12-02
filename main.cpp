@@ -1,4 +1,8 @@
 #include <iostream>
+#include <vector>
+#include <sstream>
+#include <fstream>
+#include <string>
 #include "fraction.h"
 using namespace std;
 
@@ -20,6 +24,20 @@ int main()
     cout << one_third + one_half << endl; // 5/6
     cout << three_halves - one_half << endl; // 1
     */
-    
+
+    stringstream ss;
+    ifstream iFile("input.txt");
+    if (iFile.fail()) return 1; // exit if file cannot be opened
+    string input = "";
+
+    while (!iFile.eof())
+    {
+        getline(iFile, input);
+        cout << input << endl;
+        ss << input;
+    }
+
+    iFile.close();
+
     return 0;
 }
