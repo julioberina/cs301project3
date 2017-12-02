@@ -22,6 +22,7 @@ int fraction::gcd(int a, int b)
 
 int fraction::flen(float fnum)
 {
+    if (fnum == 0.0) return 1;
     int length = 7;
     int intOfFnum = fnum * 1000000; // 10^7, floats go up to 7 digits precision
 

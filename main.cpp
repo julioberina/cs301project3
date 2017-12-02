@@ -20,6 +20,6 @@ int main()
     cout << one_third + one_half << endl; // 5/6
     cout << three_halves - one_half << endl; // 1
     */
-
+    
     return 0;
 }
