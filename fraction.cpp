@@ -20,14 +20,6 @@ int fraction::gcd(int a, int b)
     return a;
 }
 
-void fraction::reduce()
-{
-    int factor = gcd(num, den); // number that num and den have in common
-
-    num /= factor;
-    den /= factor;
-}
-
 int fraction::flen(float fnum)
 {
     int length = 7;
@@ -66,6 +58,8 @@ fraction::fraction(float fnum)
     reduce();
 }
 
+fraction::fraction(double dnum) : fraction::fraction((float)dnum) {}
+
 int fraction::numerator() const
 {
     return num;
@@ -76,6 +70,14 @@ int fraction::denominator() const
     return den;
 }
 
+void fraction::reduce()
+{
+    int factor = gcd(num, den); // number that num and den have in common
+
+    num /= factor;
+    den /= factor;
+}
+
 ostream& operator<<(ostream& outs, const fraction& frac)
 {
     if (frac.denominator() == 1)
@@ -83,4 +85,34 @@ ostream& operator<<(ostream& outs, const fraction& frac)
     else
         outs << frac.numerator() << "/" << frac.denominator();
     return outs;
+}
+
+fraction operator+(const fraction& f1, const fraction& f2)
+{
+    int tempnum = (f1.numerator() * f2.denominator()) + (f2.numerator() * f1.denominator());
+    fraction result(tempnum, f1.denominator() * f2.denominator());
+    result.reduce();
+    return result;
+}
+
+fraction operator-(const fraction& f1, const fraction& f2)
+{
+    int tempnum = (f1.numerator() * f2.denominator()) - (f2.numerator() * f1.denominator());
+    fraction result(tempnum, f1.denominator() * f2.denominator());
+    result.reduce();
+    return result;
+}
+
+fraction operator*(const fraction& f1, const fraction& f2)
+{
+    fraction result(f1.numerator() * f2.numerator(), f1.denominator() * f2.denominator());
+    result.reduce();
+    return result;
+}
+
+fraction operator/(const fraction& f1, const fraction& f2)
+{
+    fraction result(f1.numerator() * f2.denominator(), f1.denominator() * f2.numerator());
+    result.reduce();
+    return result;
 }
