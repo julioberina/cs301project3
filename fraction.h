@@ -1,6 +1,6 @@
 #ifndef FRACTION_H
 #define FRACTION_H
-#include <ostream>
+#include <iostream>
 #include <cmath>
 using namespace std;
 
