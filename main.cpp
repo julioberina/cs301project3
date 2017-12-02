@@ -4,6 +4,7 @@ using namespace std;
 
 int main()
 {
+    /*
     fraction one_third(1, 3);
     fraction one_half(1, 2);
     fraction three_halves(1.5f);
@@ -18,6 +19,7 @@ int main()
     cout << one_third / one_half << endl; // 2/3
     cout << one_third + one_half << endl; // 5/6
     cout << three_halves - one_half << endl; // 1
+    */
 
     return 0;
 }
