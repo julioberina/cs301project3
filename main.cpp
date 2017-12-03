@@ -3,22 +3,24 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include "fraction.h"
 using namespace std;
 
+const float inf = (1.0 / 0.0); // infinity
+vector<vector<float>> createTable(vector<string>& data);
+void loadData(vector<vector<float>>& table, vector<string>& data);
 int termCount(string str);
-vector<vector<fraction>> loadData(vector<string>& data);
-vector<fraction> strToFV(string str); // string to fraction vector
+vector<float> strToFV(string str);
+void outputTable(vector<vector<float>>& table);
 
 int main()
 {
     /*
-    fraction one_third(1, 3);
-    fraction one_half(1, 2);
-    fraction three_halves(1.5f);
-    fraction pie(3.14);
+    float one_third(1, 3);
+    float one_half(1, 2);
+    float three_halves(1.5f);
+    float pie(3.14);
 
-    cout << "Fraction: " << one_third.numerator() << "/" << one_third.denominator() << endl;
+    cout << "float: " << one_third.numerator() << "/" << one_third.denominator() << endl;
     cout << "Half: " << one_half << endl;
     cout << "Three-halfs: " << three_halves << endl;
     cout << "Pie: " << pie << endl;
@@ -33,83 +35,100 @@ int main()
     if (iFile.fail()) return 1; // exit if file cannot be opened
     string input = "";
     vector<string> data;
-    vector<vector<fraction>> table;
+    vector<vector<float>> table;
 
     while (getline(iFile, input))
         data.push_back(input);
 
     iFile.close();
-    table = loadData(data);
-
-    for (int x = 0; x < table.size(); ++x)
-    {
-        for (int y = 0; y < table[x].size(); ++y)
-        {
-            if (table[x][y].denominator() != 0)
-                cout << table[x][y] << "\t";
-            else
-                cout << "   \t";
-        }
-
-        cout << endl;
-    }
+    table = createTable(data);
+    loadData(table, data);
+    outputTable(table);
 
     return 0;
+}
+
+vector<vector<float>> createTable(vector<string>& data)
+{
+    vector<vector<float>> result;
+    int size = termCount(data[0]);
+
+    for (int r = 0; r < size; ++r)
+    {
+        vector<float> row;
+        for (int c = 0; c < (size+1); ++c)
+            row.push_back(inf);
+
+        result.push_back(row);
+    }
+
+    return result;
+}
+
+void loadData(vector<vector<float>>& table, vector<string>& data)
+{
+    vector<float> x = strToFV(data[0]);
+    vector<float> fx = strToFV(data[1]);
+
+    for (int r = 0; r < x.size(); ++r)
+    {
+        table[r][0] = x[r];
+        table[r][1] = fx[r];
+    }
 }
 
 int termCount(string str)
 {
     int counter = 0;
 
-    for (int i = 0; i < str.length(); ++i)
-        counter = (str[i] == ' ') ? (counter+1) : counter;
+    for (int i = 0; i < str.size(); ++i)
+        counter = (str[i] == ' ') ? counter+1 : counter;
 
-    return (counter+1);
+    return (counter + 1);
 }
 
-
-vector<vector<fraction>> loadData(vector<string>& data) // loads data in str to std::vectors
+vector<float> strToFV(string str)
 {
-    int rowCount = termCount(data[0]);
-    vector<vector<fraction>> table;
-    vector<fraction> row; // row of the table
-    fraction nullfrac(0, 0);
-
-    for (int r = 0; r < rowCount; ++r)
-    {
-        vector<fraction> row;
-        for (int c = 0; c < (rowCount+1); ++c)
-            row.push_back(nullfrac);
-
-        table.push_back(row);
-    }
-
-    vector<fraction> x = strToFV(data[0]); // x-values
-    vector<fraction> fx = strToFV(data[1]); // y-values (f(x) values)
-
-    for (int r = 0; r < rowCount; ++r)
-    {
-        table[r][0] = x[r];
-        table[r][1] = fx[r];
-    }
-
-    return table;
-}
-
-vector<fraction> strToFV(string str)
-{
-    int start = 0, end = 0;
     float input = 0.0;
+    vector<float> fv;
     stringstream ss;
-    vector<fraction> result;
     ss << str;
 
     while (!ss.eof())
     {
         ss >> input;
-        fraction frac(input);
-        result.push_back(frac);
+        fv.push_back(input);
     }
 
-    return result;
+    return fv;
+}
+
+void outputTable(vector<vector<float>>& table)
+{
+    // display table labels
+    for (int label = 0; label < table[0].size(); ++label)
+    {
+        if (label == 0)
+            cout << "x\t";
+        else
+        {
+            cout << "f[";
+            for (int count = 1; count < label; ++count)
+                cout << ",";
+            cout << "]\t";
+        }
+    }
+
+    cout << endl;
+    // display table data
+    for (int r = 0; r < table.size(); ++r)
+    {
+        for (int c = 0; c < table[r].size(); ++c)
+        {
+            if (table[r][c] != inf)
+                cout << table[r][c] << "\t";
+        }
+
+        cout << endl;
+    }
 }

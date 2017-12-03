@@ -1,2 +1,2 @@
 default:
-	g++ *.h *.cpp -o cs301project3 -std=c++11
+	g++ main.cpp -o cs301project3 -std=c++11
