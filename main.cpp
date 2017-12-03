@@ -11,6 +11,7 @@ void loadData(vector<vector<float>>& table, vector<string>& data);
 int termCount(string str);
 vector<float> strToFV(string str);
 void outputTable(vector<vector<float>>& table);
+void solveDDT(vector<vector<float>>& table); // Newton divided difference table solver
 
 int main()
 {
@@ -33,6 +34,7 @@ int main()
     string file = "";
     cout << "Enter file to input:  ";
     getline(cin, file);
+    cout << endl;
 
     ifstream iFile(file);
     if (iFile.fail()) return 1; // exit if file cannot be opened
@@ -46,6 +48,7 @@ int main()
     iFile.close();
     table = createTable(data);
     loadData(table, data);
+    solveDDT(table);
     outputTable(table);
 
     return 0;
@@ -133,5 +136,44 @@ void outputTable(vector<vector<float>>& table)
         }
 
         cout << endl;
+    }
+}
+
+void solveDDT(vector<vector<float>>& table)
+{
+    int r = 0, c = 0;
+    int currCol = 2; // current column in table
+    float xtop = 0.0, xdown = 0.0;
+
+    for (int n = (table[0].size() - 2); n > 0; --n)
+    {
+        for (int i = 0; i < n; ++i)
+        {
+            r = i;
+            c = currCol;
+
+            // traverse table to retrieve xdown
+            while (c > 1)
+            {
+                --c;
+                if (r < (table.size() - 1)) ++r;
+            }
+            xdown = table[r][c-1];
+
+            r = i;
+            c = currCol;
+
+            // traverse table to retrieve xtop
+            while (c > 1)
+            {
+                --c;
+                if (r > 0) --r;
+            }
+            xtop = table[r][c-1];
+
+            table[i][currCol] = (table[i+1][currCol-1] - table[i][currCol-1]) / (xdown - xtop);
+        }
+
+        ++currCol;
     }
 }
