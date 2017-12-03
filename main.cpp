@@ -30,8 +30,11 @@ int main()
     cout << one_third + one_half << endl; // 5/6
     cout << three_halves - one_half << endl; // 1
     */
+    string file = "";
+    cout << "Enter file to input:  ";
+    getline(cin, file);
 
-    ifstream iFile("input.txt");
+    ifstream iFile(file);
     if (iFile.fail()) return 1; // exit if file cannot be opened
     string input = "";
     vector<string> data;
