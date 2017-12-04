@@ -167,7 +167,7 @@ void solveDDT(vector<vector<float>>& table)
             while (c > 1)
             {
                 --c;
-                if (r > 0) --r;
+                if (r > 0 && c > 1) --r;
             }
             xtop = table[r][c-1];
 
