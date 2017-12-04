@@ -12,6 +12,7 @@ int termCount(string str);
 vector<float> strToFV(string str);
 void outputTable(vector<vector<float>>& table);
 void solveDDT(vector<vector<float>>& table); // Newton divided difference table solver
+void outputPolynomial(vector<vector<float>>& table);
 
 int main()
 {
@@ -34,6 +35,8 @@ int main()
     loadData(table, data);
     solveDDT(table);
     outputTable(table);
+    cout << endl;
+    outputPolynomial(table);
 
     return 0;
 }
@@ -140,4 +143,31 @@ void solveDDT(vector<vector<float>>& table)
         ++gap;
         ++currentCol;
     }
+}
+
+void outputPolynomial(vector<vector<float>>& table)
+{
+    int xsub = 0;
+
+    cout << "Interpolating polynomial is:  " << endl;
+
+    for (int c = 1; c < table[0].size(); ++c)
+    {
+        cout << table[0][c];
+        for (int x = 0; x < xsub; ++x)
+        {
+            if (table[x][0] > 0)
+                cout << "(x-" << table[x][0] << ")";
+            else if (table[x][0] < 0)
+                cout << "(x+" << (table[x][0] * -1) << ")";
+            else
+                cout << "(x)";
+        }
+
+        ++xsub;
+        if (c != (table[0].size() - 1))
+            cout << " + ";
+    }
+
+    cout << endl;
 }
