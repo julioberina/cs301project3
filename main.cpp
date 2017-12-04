@@ -141,39 +141,19 @@ void outputTable(vector<vector<float>>& table)
 
 void solveDDT(vector<vector<float>>& table)
 {
-    int r = 0, c = 0;
-    int currCol = 2; // current column in table
-    float xtop = 0.0, xdown = 0.0;
+    int gap = 1, currentCol = 2;
+    float xt = 0.0, xb = 0.0; // xb = bottom x, xt = top x
 
-    for (int n = (table[0].size() - 2); n > 0; --n)
+    for (int n = (table[0].size() - 2); n > 0; --n) // vertical traversals affected by this loop
     {
         for (int i = 0; i < n; ++i)
         {
-            r = i;
-            c = currCol;
-
-            // traverse table to retrieve xdown
-            while (c > 1)
-            {
-                --c;
-                if (r < (table.size() - 1)) ++r;
-            }
-            xdown = table[r][c-1];
-
-            r = i;
-            c = currCol;
-
-            // traverse table to retrieve xtop
-            while (c > 1)
-            {
-                --c;
-                if (r > 0 && c > 1) --r;
-            }
-            xtop = table[r][c-1];
-
-            table[i][currCol] = (table[i+1][currCol-1] - table[i][currCol-1]) / (xdown - xtop);
+            xb = table[i+gap][0];
+            xt = table[i][0];
+            table[i][currentCol] = (table[i+1][currentCol-1] - table[i][currentCol-1]) / (xb-xt);
         }
 
-        ++currCol;
+        ++gap;
+        ++currentCol;
     }
 }
