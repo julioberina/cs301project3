@@ -15,22 +15,6 @@ void solveDDT(vector<vector<float>>& table); // Newton divided difference table 
 
 int main()
 {
-    /*
-    float one_third(1, 3);
-    float one_half(1, 2);
-    float three_halves(1.5f);
-    float pie(3.14);
-
-    cout << "float: " << one_third.numerator() << "/" << one_third.denominator() << endl;
-    cout << "Half: " << one_half << endl;
-    cout << "Three-halfs: " << three_halves << endl;
-    cout << "Pie: " << pie << endl;
-
-    cout << one_third * one_half << endl; // 1/6
-    cout << one_third / one_half << endl; // 2/3
-    cout << one_third + one_half << endl; // 5/6
-    cout << three_halves - one_half << endl; // 1
-    */
     string file = "";
     cout << "Enter file to input:  ";
     getline(cin, file);
