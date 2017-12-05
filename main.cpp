@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <algorithm>
 using namespace std;
 
 const float inf = (1.0 / 0.0); // infinity
@@ -182,6 +183,7 @@ void outputLagrangePolynomial(vector<vector<float>>& table)
     vector<float> y;
     vector<float> lagrange;
     float coeff = 0.0;
+    float denominator = 1;
 
     for (int i = 0; i < table.size(); ++i)
     {
@@ -190,16 +192,37 @@ void outputLagrangePolynomial(vector<vector<float>>& table)
         lagrange.push_back(0);
     }
 
-    for (int i = 0; i < y.size(); ++y)
+    for (int i = 0; i < y.size(); ++i)
     {
+        vector<float> xprod;
+        xprod.push_back(1);
         coeff = y[i];
-        for (int j = 0; j < x.size(); ++)
+        for (int j = 0; j < x.size(); ++j)
         {
             if (j == i) continue;
-            coeff /= (x[i] - x[j]);
-            // Insert polynomial multiplication here
+            vector<float> poly;
+            denominator *= (x[i] - x[j]);
+            poly.push_back(1);
+            poly.push_back(x[j]);
+            xprod = multiplyPolynomial(xprod, poly);
+        }
+
+        coeff = coeff / denominator;
+        denominator = 1;
+        reverse(xprod.begin(), xprod.end());
+
+        // append each polynomial coefficient to Lagrange polynomial result
+        for (int j = 0; j < xprod.size(); ++j)
+        {
+            xprod[j] *= coeff;
+            lagrange[j] += xprod[j];
         }
     }
+
+    cout << "Simplified polynomial is:" << endl;
+    for (int i = 0; i < lagrange.size(); ++i)
+        cout << lagrange[i] << "x^" << i << " ";
+    cout << endl;
 }
 
 vector<float> multiplyPolynomial(vector<float> a, vector<float> b)
