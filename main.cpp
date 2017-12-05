@@ -184,6 +184,7 @@ void outputLagrangePolynomial(vector<vector<float>>& table)
     vector<float> lagrange;
     float coeff = 0.0;
     float denominator = 1;
+    int lindex = 0;
 
     for (int i = 0; i < table.size(); ++i)
     {
@@ -195,22 +196,23 @@ void outputLagrangePolynomial(vector<vector<float>>& table)
     for (int i = 0; i < y.size(); ++i)
     {
         vector<float> xprod;
-        xprod.push_back(1);
         coeff = y[i];
         for (int j = 0; j < x.size(); ++j)
         {
             if (j == i) continue;
             vector<float> poly;
             denominator *= (x[i] - x[j]);
+            poly.push_back((x[j] * -1));
             poly.push_back(1);
-            poly.push_back(x[j]);
-            xprod = multiplyPolynomial(xprod, poly);
+
+            if (xprod.empty())
+                xprod = poly;
+            else
+                xprod = multiplyPolynomial(xprod, poly);
         }
 
         coeff = coeff / denominator;
         denominator = 1;
-        reverse(xprod.begin(), xprod.end());
-
         // append each polynomial coefficient to Lagrange polynomial result
         for (int j = 0; j < xprod.size(); ++j)
         {
@@ -219,9 +221,25 @@ void outputLagrangePolynomial(vector<vector<float>>& table)
         }
     }
 
+    lindex = lagrange.size() - 1; // last index of Lagrange polynomial;
     cout << "Simplified polynomial is:" << endl;
-    for (int i = 0; i < lagrange.size(); ++i)
-        cout << lagrange[i] << "x^" << i << " ";
+    for (int n = lindex; n >= 0; --n)
+    {
+        if (lagrange[n] < 0 && n < lindex)
+            cout << (lagrange[n] * -1);
+        else
+            cout << lagrange[n];
+
+        if (n > 0)
+        {
+            cout << "x" << ((n > 1) ? ("^" + to_string(n)) : "");
+            if (lagrange[n-1] < 0)
+                cout << " - ";
+            else
+                cout << " + ";
+        }
+    }
+
     cout << endl;
 }
 
