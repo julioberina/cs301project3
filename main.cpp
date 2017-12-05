@@ -13,6 +13,8 @@ vector<float> strToFV(string str);
 void outputTable(vector<vector<float>>& table);
 void solveDDT(vector<vector<float>>& table); // Newton divided difference table solver
 void outputPolynomial(vector<vector<float>>& table);
+void outputLagrangePolynomial(vector<vector<float>>& table);
+vector<float> multiplyPolynomial(vector<float> a, vector<float> b);
 
 int main()
 {
@@ -37,6 +39,8 @@ int main()
     outputTable(table);
     cout << endl;
     outputPolynomial(table);
+    cout << endl;
+    outputLagrangePolynomial(table);
 
     return 0;
 }
@@ -170,4 +174,48 @@ void outputPolynomial(vector<vector<float>>& table)
     }
 
     cout << endl;
+}
+
+void outputLagrangePolynomial(vector<vector<float>>& table)
+{
+    vector<float> x;
+    vector<float> y;
+    vector<float> lagrange;
+    float coeff = 0.0;
+
+    for (int i = 0; i < table.size(); ++i)
+    {
+        x.push_back(table[i][0]);
+        y.push_back(table[i][1]);
+        lagrange.push_back(0);
+    }
+
+    for (int i = 0; i < y.size(); ++y)
+    {
+        coeff = y[i];
+        for (int j = 0; j < x.size(); ++)
+        {
+            if (j == i) continue;
+            coeff /= (x[i] - x[j]);
+            // Insert polynomial multiplication here
+        }
+    }
+}
+
+vector<float> multiplyPolynomial(vector<float> a, vector<float> b)
+{
+    int m = a.size();
+    int n = b.size();
+    vector<float> prod;
+
+    for (int i = 0; i < (m+n-1); ++i)
+        prod.push_back(0);
+
+    for (int i = 0; i < m; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+            prod[i+j] += (a[i]*b[j]);
+    }
+
+    return prod;
 }
